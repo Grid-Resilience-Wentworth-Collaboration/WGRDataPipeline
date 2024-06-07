@@ -39,7 +39,7 @@ The latitute-longitude co-ordiantes for a given nodes are stored in another fold
 
 ### Weather data
 
-The weather data from API at tomorrow.io are stored in another folder where JSON files are stored with a node name and a timestamp, for example, `BLKDIA_7_N001-2024-05-29 08:14:40.078147.json`. The weather forcast data are avaiable per minute, hour and day. The data in these files look like the following:
+The weather data from API at tomorrow.io are stored in another folder where JSON files are stored with a node name and a timestamp, for example, `BLKDIA_7_N001-2024-05-29 08:14:40.078147.json`. The weather forcast data are avaiable per minute, hour and day. The data in these files look like the following. Note that the timestamps could be in a different timezone than the LMP data.
 
 ```JSON
 {
@@ -220,4 +220,23 @@ The weather data from API at tomorrow.io are stored in another folder where JSON
 ```
 
 ## Pipline 1, modules
+
+### Data availability
+
+The data availability module takes as input a given `Node ID`, a given timestamp in UTC and outputs whether data are avaiable for a given set of tolerance values. For example, if the node is `EMBRCDR_2_N104`, and the time is `2024-05-29 13:00`, the module will scan the provided folders to look for whether LMP data is avaiable for the date `2024-05-29` and any number of days before this timestamp as provided in the tolerate inputs. It will also check whether weather forcast data are avaiable for this date by looking at whether a file exists in the weather forcast folder with the right name. A further extension, in the future, could look for data availability for nearby nodes.
+
+Parameters:
+
+1. 
+
+### Series Creator
+
+The series creater module takes as input a given `Node ID`, a given timestamp in UTC and outputs a series of data that can be used as input to 
+the forcaster. The series output is a JSON file with the following fields:
+
+1. LMP Historical
+    - time
+    - LMP
+2. Weather Forcast
+
 
