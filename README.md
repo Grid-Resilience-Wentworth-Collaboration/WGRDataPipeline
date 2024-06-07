@@ -1,6 +1,9 @@
 # WGRDataPipeline
 Data pipeline snippets for Wentworth grid resiliency projects. 
 
+1. [Pipeline 1](# Pipeline 1, Price Forcasting)
+    1.1 [Data Formats] ## Pipeline 1, data formats
+
 # Pipeline 1, Price Forcasting
 
 In this project, we are attempting to forecast the price of electricity that grid operators/power companies will
@@ -214,3 +217,6 @@ The weather data from API at tomorrow.io are stored in another folder where JSON
         }
       },
 ```
+
+## Pipline 1, modules
+
