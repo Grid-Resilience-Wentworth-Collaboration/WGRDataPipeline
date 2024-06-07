@@ -37,7 +37,8 @@ The latitute-longitude co-ordiantes for a given nodes are stored in another fold
 
 The weather data from API at tomorrow.io are stored in another folder where JSON files are stored with a node name and a timestamp, for example, `BLKDIA_7_N001-2024-05-29 08:14:40.078147.json`. The weather forcast data are avaiable per minute, hour and day. The data in these files look like the following:
 
-```{
+```JSON
+{
   "timelines": {
     "minutely": [
       {
