@@ -68,7 +68,8 @@ The weather data from API at tomorrow.io are stored in another folder where JSON
       },
 ```
 
-``` "daily": [
+```JSON
+"daily": [
       {
         "time": "2024-05-28T13:00:00Z",
         "values": {
@@ -175,7 +176,7 @@ The weather data from API at tomorrow.io are stored in another folder where JSON
       },
 ```
 
-```
+```JSON
     "hourly": [
       {
         "time": "2024-05-29T12:00:00Z",
