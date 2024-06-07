@@ -23,8 +23,12 @@ LMP_DAM_FORECAST(t, node), where t ==  2024-Jun-07 at 8:40 AM Pacific time. But,
 
 ### LMP Data
 
-The LMP Data are avaiable at a given folder in our file system, where data for each date are stored in CSV file named by date. For example, `2024-05-16.csv` contains data from 2024-May-16. The have the columns shown the following figure.
+The LMP Data are avaiable at a given folder in our file system, where data for each date are stored in CSV file named by date. For example, `2024-05-16.csv` contains data from 2024-May-16. The have the columns shown the following figure. The -7 indicates offset from UTC Time for this data.
+
+![LMP Data Example](./screenshots/LMP%20Data%20Example%20Screenshot%202024-06-07%20at%2012.15.08 PM.png)
 
 ### Co-ordinates data
 
-![LMP Data Example](./screenshots/LMP%20Data%20Example%20Screenshot%202024-06-07%20at%2012.15.08 PM.png)
+The latitute-longitude co-ordiantes for a given nodes are stored in another folder in a JSON file with a given name. An example is shown below.
+
+![Node Location Example](./screenshots/Node%20Location%20Example%20Screenshot%202024-06-07%20at%2012.22.51 PM.png)
