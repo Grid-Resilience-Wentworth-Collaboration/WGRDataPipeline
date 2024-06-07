@@ -15,10 +15,16 @@ predict what the price will be one more day head. For example, on 2024-Jun-07 at
 
 ![Day Ahead Market Example](./screenshots/CAISO%20DayAhead%20Map%20Screenshot%202024-06-07%20at%2011.43.56 AM.png)
 
-Let's call this LMP_DAM(t, node) where t == 2024-Jun-07 at 8:40 AM Pacific time. For the first pass, we will use the Day Ahead Market data available to 2024-Jun-06, 8:40 AM PT. We have hourly data available on LMP for the currrent time for the given node. We will use the day till 2024-Jun-06, and create a forcast 
+Let's call this LMP_DAM(t, node) where t == 2024-Jun-07 at 8:40 AM Pacific time. For the first pass, we will use the Day Ahead Market data available to 2024-Jun-06, 8:40 AM PT. We have hourly data available on LMP for the currrent time for the given node. We will use the day till 2024-Jun-06, and create a forcast.
 
 LMP_DAM_FORECAST(t, node), where t ==  2024-Jun-07 at 8:40 AM Pacific time. But, we are only allowed to use data to LMP_DAM(t-24 hours, ...). We are allowed to use data from other locations and any other data to this t-24 hours time from other sources. For example, we are experimenting with using weather data from tomorrow.io.
 
 ## Pipeline 1, data formats
 
+### LMP Data
 
+The LMP Data are avaiable at a given folder in our file system, where data for each date are stored in CSV file named by date. For example, `2024-05-16.csv` contains data from 2024-May-16. The have the columns shown the following figure.
+
+### Co-ordinates data
+
+![LMP Data Example](./screenshots/LMP%20Data%20Example%20Screenshot%202024-06-07%20at%2012.15.08 PM.png)
