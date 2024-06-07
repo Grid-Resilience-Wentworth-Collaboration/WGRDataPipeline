@@ -1,8 +1,8 @@
 # WGRDataPipeline
 Data pipeline snippets for Wentworth grid resiliency projects. 
 
-1. [Pipeline 1](# Pipeline 1, Price Forcasting)
-    1.1 [Data Formats] ## Pipeline 1, data formats
+1. [Pipeline 1](#Pipeline-1,-Price-Forcasting)
+- [Data Formats] ##Pipeline-1,-data-formats
 
 # Pipeline 1, Price Forcasting
 
