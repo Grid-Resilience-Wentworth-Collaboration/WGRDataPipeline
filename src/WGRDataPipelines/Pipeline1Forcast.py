@@ -27,7 +27,7 @@ class DataGatherer:
         # use https://docs.gridstatus.io/en/latest/lmp.html to gather data and save to folder
         # pointed to by LMP_DATA_PATH environment variable
         caiso = gridstatus.CAISO()
-        gather_date = os.getenv("LMP_DATA_GATHER_DATE")
+        gather_date = date.strftime("%Y-%m-%d")
         data = caiso.get_lmp(
             date=gather_date,
             market="DAY_AHEAD_HOURLY",
