@@ -13,9 +13,7 @@ while START <= END:
     print(f"Getting data for {START_STR}")
     if os.path.exists(f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv'):
         print(f"Data already exists for {START_STR}")
-        START = datetime.datetime.strptime(START, "%Y-%m-%d") + datetime.timedelta(
-            days=1
-        )
+        START = START + datetime.timedelta(days=1)
         continue
     gatherer.gatherCAISO_LMPData(START)
-    START = datetime.datetime.strptime(START, "%Y-%m-%d") + datetime.timedelta(days=1)
+    START = START + datetime.timedelta(days=1)
