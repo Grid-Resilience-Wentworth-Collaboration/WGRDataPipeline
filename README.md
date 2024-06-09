@@ -227,7 +227,12 @@ The data availability module takes as input a given `Node ID`, a given timestamp
 
 Parameters:
 
-1. 
+1. Node ID
+2. Datetime
+1. Datetime tolerance (in hours)
+    - This parameter determines whether the very first data point avaiable is within the given tolerance of hours
+2. History (in days)
+    - This parameter determines if data is avaiable for at least given number of days in the past from the given date/time
 
 ### Series Creator
 
