@@ -221,6 +221,15 @@ The weather data from API at tomorrow.io are stored in another folder where JSON
 
 ## Pipline 1, modules
 
+### Data Gatherer
+
+Gathers data for training and analysis. To run, make sure you are in the right python environment, and have 
+an approriate .evn. Run the Data Gatherer code.
+```bash
+cd src
+python RunDataGatherer.py
+```
+
 ### Data availability
 
 The data availability module takes as input a given `Node ID`, a given timestamp in UTC and outputs whether data are avaiable for a given set of tolerance values. For example, if the node is `EMBRCDR_2_N104`, and the time is `2024-05-29 13:00`, the module will scan the provided folders to look for whether LMP data is avaiable for the date `2024-05-29` and any number of days before this timestamp as provided in the tolerate inputs. It will also check whether weather forcast data are avaiable for this date by looking at whether a file exists in the weather forcast folder with the right name. A further extension, in the future, could look for data availability for nearby nodes.
@@ -229,9 +238,9 @@ Parameters:
 
 1. Node ID
 2. Datetime
-1. Datetime tolerance (in hours)
-    - This parameter determines whether the very first data point avaiable is within the given tolerance of hours
-2. History (in days)
+1. Datetime tolerance (in minutes)
+    - This parameter determines whether the very first data point avaiable is within the given tolerance of minutes
+2. History (in hours)
     - This parameter determines if data is avaiable for at least given number of days in the past from the given date/time
 
 ### Series Creator
