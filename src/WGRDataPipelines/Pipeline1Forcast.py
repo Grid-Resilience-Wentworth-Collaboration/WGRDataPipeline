@@ -61,3 +61,42 @@ class DataAvailibility:
         for i in range(0, self.historyHours):
             pass
         return None
+
+
+class SeriesCreator:
+
+    def __init__(self):
+        pass
+
+    def createSeriesV1(
+        self,
+        nodeID: str,
+        forcastAt: datetime,
+        toleranceMinutes: float,
+        historyHours: int,
+    ) -> None:
+        self.nodeID = nodeID
+        self.forcastAt = forcastAt
+        self.toleranceMinutes = toleranceMinutes
+        self.historyHours = historyHours
+
+        series = dict()
+        series["nodeID"] = nodeID
+        series["forcastAt"] = forcastAt
+        series["toleranceMinutes"] = toleranceMinutes
+        series["historyHours"] = historyHours
+        series["series"] = dict()
+
+        START = forcastAt
+        END = forcastAt - datetime.timedelta(hours=historyHours)
+        while START >= END:
+            START_STR = START.strftime("%Y-%m-%d")
+            print(f"Getting data for {START_STR}")
+            if not os.path.exists(f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv'):
+                print(f"Data does not exists for {START_STR}")
+                START = START + datetime.timedelta(days=1)
+                continue
+            gatherer.gatherCAISO_LMPData(START)
+            START = START + datetime.timedelta(days=1)
+
+        pass

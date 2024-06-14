@@ -253,4 +253,6 @@ the forcaster. The series output is a JSON file with the following fields:
     - LMP
 2. Weather Forcast
 
+The output of the series creator is a JSON file that resides in the folder from the `SERIES_FOLDER` environment variable. In version 1, the series folder has files named in the format `NodeID_DateTime.json`. For example, `EMBRCDR_2_N104_2024-05-29-1300+0700.json`. The series data is readied to be fed to the LLM for forcast. As we experiment with forcast accuracy, we will need to experiment with this output format, but we will always have prior versions in the code available for comparison.
+
 
