@@ -1,6 +1,7 @@
 from datetime import datetime
 from dotenv import load_dotenv
 import os
+import pandas as pd
 
 import gridstatus
 
@@ -93,10 +94,7 @@ class SeriesCreator:
             START_STR = START.strftime("%Y-%m-%d")
             print(f"Getting data for {START_STR}")
             if not os.path.exists(f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv'):
-                print(f"Data does not exists for {START_STR}")
-                START = START + datetime.timedelta(days=1)
-                continue
-            gatherer.gatherCAISO_LMPData(START)
-            START = START + datetime.timedelta(days=1)
+                raise Exception(f"Data does not exists for {START_STR}")
+            pd.read_csv(f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv')
 
         pass
