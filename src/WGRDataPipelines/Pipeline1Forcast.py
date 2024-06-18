@@ -95,6 +95,11 @@ class SeriesCreator:
             print(f"Getting data for {START_STR}")
             if not os.path.exists(f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv'):
                 raise Exception(f"Data does not exists for {START_STR}")
-            pd.read_csv(f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv')
-
+            data = (
+                pd.read_csv(f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv')["Location"]
+                == nodeID
+            )
+            while data["Time"] >= START:
+                series["series"][data["Time"]] = data["LMP"]
+                pass
         pass
