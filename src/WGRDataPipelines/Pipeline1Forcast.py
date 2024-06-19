@@ -1,8 +1,8 @@
-from datetime import datetime
+import datetime
 from dotenv import load_dotenv
 import os
 import pandas as pd
-
+from dateutil import parser
 import gridstatus
 
 
@@ -42,7 +42,7 @@ class DataAvailibility:
     def __init__(
         self,
         nodeID: str,
-        forcastAt: datetime,
+        forcastAt: datetime.datetime,
         toleranceMinutes: float,
         historyHours: int,
     ):
@@ -72,7 +72,7 @@ class SeriesCreator:
     def createSeriesV1(
         self,
         nodeID: str,
-        forcastAt: datetime,
+        forcastAt: datetime.datetime,
         toleranceMinutes: float,
         historyHours: int,
     ) -> None:
@@ -95,11 +95,17 @@ class SeriesCreator:
             print(f"Getting data for {START_STR}")
             if not os.path.exists(f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv'):
                 raise Exception(f"Data does not exists for {START_STR}")
-            data = (
-                pd.read_csv(f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv')["Location"]
-                == nodeID
+            data = pd.read_csv(
+                f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv',
+                parse_dates=[0, 1],
+                date_format="mixed",
             )
-            while data["Time"] >= START:
-                series["series"][data["Time"]] = data["LMP"]
-                pass
-        pass
+            data = data[data["Location"] == nodeID]
+            for i in range(0, len(data)):
+                data_row = data.iloc[i]
+                if data_row["Time"] >= START:
+                    series["series"][data_row["Time"]] = data_row["LMP"]
+                START = START - datetime.timedelta(hours=1)
+                if START < END:
+                    break
+        return series
