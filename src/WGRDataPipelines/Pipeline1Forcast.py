@@ -2,8 +2,9 @@ import datetime
 from dotenv import load_dotenv
 import os
 import pandas as pd
-from dateutil import parser
 import gridstatus
+import glob
+import json
 
 
 class DataGaps:
@@ -66,38 +67,36 @@ class DataAvailibility:
 
 class SeriesCreator:
 
-    def __init__(self):
-        pass
-
-    def getClosestForcast(
+    def __init__(
         self,
         nodeId: str,
         forcastAt: datetime.datetime,
         toleranceMinutes: float,
         historyHours: int,
-    ) -> dict:
-        return dict()
+    ):
+        self.nodeId = nodeId
+        self.forcastAt = forcastAt
+        self.toleranceMinutes = toleranceMinutes
+        self.historyHours = historyHours
+        pass
 
-    def createSeriesV1(
-        self,
-        nodeID: str,
-        forcastAt: datetime.datetime,
-        toleranceMinutes: float,
-        historyHours: int,
-    ) -> dict:
+    def getClosestForcast(self) -> dict:
+        pattern = f'{os.getenv("SERIES_CREATOR_WEATHER_FORCAST_PATH")}/{self.nodeId}-{self.forcastAt.strftime("%Y-%m-%d")}*.json'
+        file_list = glob.glob(pattern)
+        return json.load(open(file_list[0]))
+
+    def createSeriesV1(self) -> dict:
 
         series = dict()
-        series["nodeID"] = nodeID
-        series["forcastAt"] = forcastAt
-        series["toleranceMinutes"] = toleranceMinutes
-        series["historyHours"] = historyHours
+        series["nodeId"] = self.nodeId
+        series["forcastAt"] = self.forcastAt
+        series["toleranceMinutes"] = self.toleranceMinutes
+        series["historyHours"] = self.historyHours
         series["series"] = []
-        series["forcast"] = self.getClosestForcast(
-            forcastAt, toleranceMinutes, historyHours
-        )
+        series["forcast"] = self.getClosestForcast()
 
-        START = forcastAt
-        END = forcastAt - datetime.timedelta(hours=historyHours)
+        START = self.forcastAt
+        END = self.forcastAt - datetime.timedelta(hours=self.historyHours)
         while START >= END:
             START_STR = START.strftime("%Y-%m-%d")
             print(f"Getting data for {START_STR}")
@@ -108,7 +107,7 @@ class SeriesCreator:
                 parse_dates=[0, 1],
                 date_format="mixed",
             )
-            data = data[data["Location"] == nodeID]
+            data = data[data["Location"] == self.nodeId]
             for i in range(0, len(data)):
                 data_row = data.iloc[i]
                 if data_row["Time"] >= START:
