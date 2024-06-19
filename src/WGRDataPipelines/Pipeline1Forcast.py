@@ -69,24 +69,32 @@ class SeriesCreator:
     def __init__(self):
         pass
 
+    def getClosestForcast(
+        self,
+        nodeId: str,
+        forcastAt: datetime.datetime,
+        toleranceMinutes: float,
+        historyHours: int,
+    ) -> dict:
+        return dict()
+
     def createSeriesV1(
         self,
         nodeID: str,
         forcastAt: datetime.datetime,
         toleranceMinutes: float,
         historyHours: int,
-    ) -> None:
-        self.nodeID = nodeID
-        self.forcastAt = forcastAt
-        self.toleranceMinutes = toleranceMinutes
-        self.historyHours = historyHours
+    ) -> dict:
 
         series = dict()
         series["nodeID"] = nodeID
         series["forcastAt"] = forcastAt
         series["toleranceMinutes"] = toleranceMinutes
         series["historyHours"] = historyHours
-        series["series"] = dict()
+        series["series"] = []
+        series["forcast"] = self.getClosestForcast(
+            forcastAt, toleranceMinutes, historyHours
+        )
 
         START = forcastAt
         END = forcastAt - datetime.timedelta(hours=historyHours)
@@ -104,7 +112,10 @@ class SeriesCreator:
             for i in range(0, len(data)):
                 data_row = data.iloc[i]
                 if data_row["Time"] >= START:
-                    series["series"][data_row["Time"]] = data_row["LMP"]
+                    data_item = dict()
+                    data_item["Time"] = data_row["Time"]
+                    data_item["LMP"] = data_row["LMP"]
+                    series["series"].append(data_item)
                 START = START - datetime.timedelta(hours=1)
                 if START < END:
                     break
