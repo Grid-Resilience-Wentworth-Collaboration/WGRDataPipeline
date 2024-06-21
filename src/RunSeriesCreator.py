@@ -11,7 +11,7 @@ START = parser.parse(os.getenv("SERIES_CREATOR_START_DATETIME"))
 HOURS = int(os.getenv("SERIES_CREATOR_HISTORY_HOURS"))
 TOL = int(os.getenv("SERIES_CREATOR_TOLERANCE_MINUTES"))
 creator = SeriesCreator(NodeId, START, TOL, HOURS)
-series = creator.createSeriesV1()
+series = creator.createTrainingSeriesV1()
 OUTPUT_PATH = os.getenv("SERIES_CREATOR_OUTPUT_PATH")
 
 with open(f"{OUTPUT_PATH}/{NodeId}-{START}-{HOURS}.json", "w") as f:
