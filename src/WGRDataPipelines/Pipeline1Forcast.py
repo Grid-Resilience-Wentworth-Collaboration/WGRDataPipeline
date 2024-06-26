@@ -10,13 +10,13 @@ import json
 class DataGaps:
 
     def __init__(self):
-        pass
+        self.gaps={'LMP_GAPS':{}}
 
     def isComplete(self) -> bool:
-        return True
+        return len(self.gaps)==0
 
     def getGaps(self) -> dict:
-        return {}
+        return self.gaps
 
 
 class DataGatherer:
@@ -42,28 +42,63 @@ class DataAvailibility:
 
     def __init__(
         self,
-        nodeID: str,
-        forcastAt: datetime.datetime,
-        toleranceMinutes: float,
-        historyHours: int,
+        # nodeID: str,
+        # forcastAt: datetime.datetime,
+        # toleranceMinutes: float,
+        # historyHours: int,
     ):
         load_dotenv()
-        self.nodeID = nodeID
-        self.forcastAt = forcastAt
-        self.toleranceMinutes = toleranceMinutes
-        self.historyHours = historyHours
-
+        self.nodeID = os.getenv("SERIES_CREATOR_NODE_ID")
+        self.forcastAt = None
+        self.toleranceMinutes = int(os.getenv("SERIES_CREATOR_TOLERANCE_MINUTES"))
+        self.historyHours = int(os.getenv("SERIES_CREATOR_HISTORY_HOURS"))
+        self.hourlyIncrement=1
         self.LMP_DATA_PATH = os.getenv("LMP_DATA_PATH")
         self.LMP_DATA_TIMEZONE = os.getenv("LMP_DATA_TIMEZONE")
 
+    def is_dst(self,date):
+        year = date.year
+        # Find the second Sunday in March
+        second_sunday_march = datetime.datetime(year, 3, 8) + datetime.timedelta(days=(6 - datetime.datetime(year, 3, 8).weekday()))
+        # Find the first Sunday in November
+        first_sunday_november = datetime.datetime(year, 11, 1) + datetime.timedelta(days=(6 - datetime.datetime(year, 11, 1).weekday()))
+
+        return second_sunday_march <= date < first_sunday_november
     def getDataGaps(self) -> DataGaps:
         # Start by analyzing whether historical LMP data are available for given date range
         # For now we will assume that the datetime input is in UTC and we will convert it to given timezone for querying
         # existence of data files in the file system
-        for i in range(0, self.historyHours):
-            pass
-        return None
-
+        START = datetime.datetime.strptime(os.getenv("LMP_DATA_GATHER_DATE_START"), "%Y-%m-%d")
+        END = datetime.datetime.strptime(os.getenv("LMP_DATA_GATHER_DATE_END"), "%Y-%m-%d")
+        data_gaps=DataGaps()
+        while START <= END:
+            START_STR = START.strftime("%Y-%m-%d")
+            file_path=f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv'
+            current_time=datetime.datetime.strptime(os.getenv("LMP_CREATOR_START_DATETIME"), "%Y-%m-%d %H:%M:%S%z")
+            is_dst=self.is_dst(START)
+            if not is_dst:
+                new_timezone =  datetime.timezone(datetime.timedelta(hours=-8))
+                current_time=current_time.replace(tzinfo=new_timezone)
+            with open(file=file_path,mode='r') as file:
+                rows=pd.read_csv(file)
+                for _,row in rows.iterrows():
+                    if row['Location']!=self.nodeID:
+                        continue
+                    row_time = datetime.datetime.strptime(row['Time'], "%Y-%m-%d %H:%M:%S%z")
+                    lower_bound=current_time-datetime.timedelta(minutes=self.toleranceMinutes)
+                    upper_bound=current_time+datetime.timedelta(minutes=self.toleranceMinutes)
+                    is_data_under_tolerance=lower_bound<=row_time<=upper_bound
+                    if not is_data_under_tolerance :
+                        data_gaps.gaps['LMP_GAPS'][self.nodeID]=row
+                    else:
+                        current_time+=datetime.timedelta(hours=self.hourlyIncrement)
+                    
+                
+                START = START + datetime.timedelta(days=1)
+                
+        return data_gaps.getGaps()
+        # if len(data_gaps.gaps)
+                
 
 class SeriesCreator:
 
@@ -119,3 +154,6 @@ class SeriesCreator:
                 if START < END:
                     break
         return series
+
+
+print(DataAvailibility().getDataGaps())
