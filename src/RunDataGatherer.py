@@ -1,4 +1,4 @@
-from WGRDataPipelines.Pipeline1Forcast import DataGatherer
+from WGRDataPipelines.Pipeline1Forecast import DataGatherer
 import datetime
 from dotenv import load_dotenv
 import os

@@ -1,4 +1,4 @@
-from WGRDataPipelines.Pipeline1Forcast import SeriesCreator
+from WGRDataPipelines.Pipeline1Forecast import SeriesCreator
 from dateutil import parser
 from dotenv import load_dotenv
 import os
