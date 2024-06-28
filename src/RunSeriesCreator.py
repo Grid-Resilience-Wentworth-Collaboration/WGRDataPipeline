@@ -15,4 +15,4 @@ series = creator.createTrainingSeriesV1()
 OUTPUT_PATH = os.getenv("SERIES_CREATOR_OUTPUT_PATH")
 
 with open(f"{OUTPUT_PATH}/{NodeId}-{START}-{HOURS}.json", "w") as f:
-    json.dump(series, f, indent=4, sort_keys=True, default=str)
+    json.dump(series, f, indent=4, sort_keys=False, default=str)

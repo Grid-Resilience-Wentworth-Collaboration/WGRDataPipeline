@@ -157,28 +157,4 @@ class SeriesCreator:
                 START = START - datetime.timedelta(hours=1)
                 if START < END:
                     break
-
-        START = self.forcastAt
-        END = self.forcastAt + datetime.timedelta(hours=168)  # 7 days
-        while START <= END:
-            START_STR = START.strftime("%Y-%m-%d")
-            print(f"Getting data for {START_STR}")
-            if not os.path.exists(f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv'):
-                raise Exception(f"Data does not exists for {START_STR}")
-            data = pd.read_csv(
-                f'{os.getenv("LMP_DATA_PATH")}/{START_STR}.csv',
-                parse_dates=[0, 1],
-                date_format="mixed",
-            )
-            data = data[data["Location"] == self.nodeId]
-            for i in range(0, len(data)):
-                data_row = data.iloc[i]
-                if data_row["Time"] <= START:
-                    data_item = dict()
-                    data_item["Time"] = data_row["Time"]
-                    data_item["LMP"] = data_row["LMP"]
-                    series["LMPForecast"].append(data_item)
-                START = START + datetime.timedelta(hours=1)
-                if START > END:
-                    break
         return series
