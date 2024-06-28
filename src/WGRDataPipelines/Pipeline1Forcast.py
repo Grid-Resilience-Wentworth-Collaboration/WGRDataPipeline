@@ -135,7 +135,7 @@ class SeriesCreator:
             data = data[data["Location"] == self.nodeId]
             for i in range(0, len(data)):
                 data_row = data.iloc[i]
-                if data_row["Time"] >= START:
+                if data_row["Time"] <= START:
                     data_item = dict()
                     data_item["Time"] = data_row["Time"]
                     data_item["LMP"] = data_row["LMP"]
