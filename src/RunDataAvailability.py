@@ -1,4 +1,4 @@
-from WGRDataPipelines.Pipeline1Forcast import DataAvailability
+from WGRDataPipelines.Pipeline1Forecast import DataAvailability
 from dateutil import parser
 from dotenv import load_dotenv
 import os
