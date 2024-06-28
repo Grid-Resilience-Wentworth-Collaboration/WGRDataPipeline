@@ -155,5 +155,3 @@ class SeriesCreator:
                     break
         return series
 
-
-print(DataAvailibility().getDataGaps())
