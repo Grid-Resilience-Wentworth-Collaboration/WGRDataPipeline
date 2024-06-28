@@ -85,23 +85,20 @@ class DataAvailability:
                 rows = pd.read_csv(file)
                 rows = rows[rows["Location"] == self.nodeId]
                 # TODO: Check data availability for given START within tolerance
-                for _, row in rows.iterrows():
-                    row_time = datetime.datetime.strptime(
-                        row["Time"], "%Y-%m-%d %H:%M:%S%z"
-                    )
-                    lower_bound = current_time - datetime.timedelta(
-                        minutes=self.toleranceMinutes
-                    )
-                    upper_bound = current_time + datetime.timedelta(
-                        minutes=self.toleranceMinutes
-                    )
-                    is_data_under_tolerance = lower_bound <= row_time <= upper_bound
-                    if not is_data_under_tolerance:
-                        data_gaps.gaps["LMP_GAPS"][self.nodeID] = row
-                    else:
-                        current_time += datetime.timedelta(hours=self.hourlyIncrement)
+                lower_bound = current_time - datetime.timedelta(
+                    minutes=self.toleranceMinutes
+                )
+                upper_bound = current_time + datetime.timedelta(
+                    minutes=self.toleranceMinutes
+                )
+                rows_within_tol = rows[
+                    (rows["Time"] >= lower_bound) and (rows["Time"] <= upper_bound)
+                ]
+                if len(rows_within_tol) == 0:
+                    data_gaps.gaps["LMP_GAPS"][self.nodeID] = current_time
+                current_time += datetime.timedelta(hours=self.hourlyIncrement)
 
-                START = START + datetime.timedelta(days=1)
+            START = START + datetime.timedelta(days=1)
 
         return data_gaps.getGaps()
 
